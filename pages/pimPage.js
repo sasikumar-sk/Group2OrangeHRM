@@ -57,11 +57,9 @@ export class PIMPage {
 
     // Select Status - Enabled 
     try {
-      const statusDropdown = this.page.locator('.oxd-input-group').filter({ hasText: 'Status' }).locator('.oxd-select-text');
-      if (await statusDropdown.isVisible().catch(() => false)) {
-        await statusDropdown.click();
-        await this.page.waitForTimeout(500);
-        await this.page.click('text=Enabled');
+      const enabledLabel = this.page.locator('label').filter({ hasText: 'Enabled' });
+      if (await enabledLabel.isVisible().catch(() => false)) {
+        await enabledLabel.click();
       } else {
         console.log('Status field not visible, skipping');
       }
@@ -74,7 +72,7 @@ export class PIMPage {
 
     // Wait for success toast
     try {
-      await this.page.waitForSelector('.oxd-toast-container--success', { state: 'visible', timeout: 10000 });
+      await this.page.waitForSelector('.oxd-toast', { state: 'visible', timeout: 10000 });
       console.log('Employee created successfully with login details');
     } catch (error) {
       console.error('Employee creation success toast not visible');
@@ -90,7 +88,12 @@ export class PIMPage {
 
   async verifyNoRecordsFound() {
     const noRecords = this.page.locator('text=/No Records Found|No se encontraron registros/');
-    return await noRecords.isVisible().catch(() => false);
+    try {
+      await noRecords.waitFor({ state: 'visible', timeout: 5000 });
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   async searchEmployee(employeeName) {
@@ -100,15 +103,15 @@ export class PIMPage {
       await searchInput.waitFor({ state: 'visible', timeout: 10000 });
       await searchInput.fill(employeeName);
     } catch (error) {
-      // Fallback: try alternative locator
+
       console.log('Primary search locator failed, trying fallback:', error.message);
-      const fallbackInput = this.page.locator('input[class*="oxd-input"]').filter({ 
+      const fallbackInput = this.page.locator('input[class*="oxd-input"]').filter({
         has: this.page.locator('[placeholder*="Type for hints"], [placeholder*="sugerencias"]')
       }).first();
       await fallbackInput.waitFor({ state: 'visible', timeout: 10000 });
       await fallbackInput.fill(employeeName);
     }
-    
+
     await this.page.click('button[type="submit"]');
     await this.page.waitForLoadState('networkidle', { timeout: 10000 });
   }

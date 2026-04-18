@@ -7,10 +7,11 @@ test('SC01-SC13 - Employee Creation and Search Flow', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const pimPage = new PIMPage(page);
 
-  const firstName = 'testuser';
+  const uniqueId = Date.now().toString().slice(-5);
+  const firstName = `testuser${uniqueId}`;
   const lastName = 'Sasi';
-  const employeeId = 'testuser1';
-  const username = 'testuserSasi';
+  const employeeId = `ID${uniqueId}`;
+  const username = `testSasi${uniqueId}`;
   const password = 'Test@1234';
   const employeeName = `${firstName} ${lastName}`;
 
@@ -21,16 +22,12 @@ test('SC01-SC13 - Employee Creation and Search Flow', async ({ page }) => {
   await pimPage.navigateToPIM();
 
   // SC02 – Search Employee (Initial Check)
-  await pimPage.searchEmployee(employeeId);
+  await pimPage.searchEmployee(employeeName);
   const noRecordsFound = await pimPage.verifyNoRecordsFound();
 
-  // SC03 – Handle No Records & Add Employee
-  if (noRecordsFound) {
-    console.log('No Records Found - proceeding to add employee');
-  } else {
-    console.log('Employee already exists');
-  }
-
+  // SC03 – Add Employee
+  console.log('Proceeding to add employee');
+  
   // SC04 – Create Login Details for Employee
   await pimPage.createEmployee(firstName, lastName, username, password, employeeId);
 
