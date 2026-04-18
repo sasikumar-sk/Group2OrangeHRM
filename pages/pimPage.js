@@ -13,14 +13,12 @@ export class PIMPage {
     try {
       await this.pimMenu.waitFor({ state: 'visible', timeout: 5000 });
       await this.pimMenu.click();
+      // Wait for navigation to complete
+      await this.page.waitForLoadState('networkidle', { timeout: 10000 });
     } catch (error) {
       console.error('Failed to click PIM menu:', error.message);
+      throw error; // Re-throw to fail the test explicitly
     }
-    // Wait for PIM header to be visible instead of networkidle
-    await this.page.waitForSelector('h6', { timeout: 10000 }).catch(() => {
-      // Fallback to loadstate if selector not found
-      return this.page.waitForLoadState('domcontentloaded', { timeout: 5000 });
-    });
   }
 
   async createEmployee(firstName, lastName, username, password, employeeId) {
@@ -96,7 +94,21 @@ export class PIMPage {
   }
 
   async searchEmployee(employeeName) {
-    await this.page.locator('input[placeholder*="Type for hints"], input[placeholder*="sugerencias"]').first().fill(employeeName);
+    // Wait for the search input to be visible before interacting
+    try {
+      const searchInput = this.page.locator('input[placeholder*="Type for hints"], input[placeholder*="sugerencias"]').first();
+      await searchInput.waitFor({ state: 'visible', timeout: 10000 });
+      await searchInput.fill(employeeName);
+    } catch (error) {
+      // Fallback: try alternative locator
+      console.log('Primary search locator failed, trying fallback:', error.message);
+      const fallbackInput = this.page.locator('input[class*="oxd-input"]').filter({ 
+        has: this.page.locator('[placeholder*="Type for hints"], [placeholder*="sugerencias"]')
+      }).first();
+      await fallbackInput.waitFor({ state: 'visible', timeout: 10000 });
+      await fallbackInput.fill(employeeName);
+    }
+    
     await this.page.click('button[type="submit"]');
     await this.page.waitForLoadState('networkidle', { timeout: 10000 });
   }
