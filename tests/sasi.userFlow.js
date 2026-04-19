@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/loginPage.js';
-import { PIMPage } from '../pages/pimPage.js';
+import{ LoginPage} from '../pages/LoginPage.js';
+import { PIMPage } from '../pages/pimPage.js'
 import env from '../config/env.js';
 
 test('SC01-SC13 - Employee Creation and Search Flow', async ({ page }) => {

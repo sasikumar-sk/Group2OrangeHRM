@@ -5,7 +5,8 @@ export class LoginPage {
     // Locators
     this.usernameInput = page.locator('input[name="username"]');
     this.passwordInput = page.locator('input[name="password"]');
-    this.loginBtn = page.locator('button[type="submit"]');
+    this.loginBtn = page.getByRole('button', { name: 'Login' });
+    this.errorMessage = page.getByText('Invalid credentials')
   }
 
   async navigate(url) {
@@ -17,6 +18,6 @@ export class LoginPage {
     await this.page.fill('input[name="username"]', username);
     await this.page.fill('input[name="password"]', password);
     await this.loginBtn.click();
-    await this.page.waitForSelector('h6', { timeout: 10000 });
+  
   }
 }
