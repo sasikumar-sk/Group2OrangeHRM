@@ -28,4 +28,4 @@ const test = base.extend({
 
 })
 
-module.exports = { test }
+export { test }
