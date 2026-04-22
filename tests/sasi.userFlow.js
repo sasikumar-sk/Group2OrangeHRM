@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import{ LoginPage} from '../pages/LoginPage.js';
+import{ LoginPage} from '../pages/loginPage.js';
 import { PIMPage } from '../pages/pimPage.js'
 import env from '../config/env.js';
 

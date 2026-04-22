@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import{ LoginPage} from '../pages/LoginPage.js';
+import{ LoginPage} from '../pages/loginPage.js';
 import env from '../config/env.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
