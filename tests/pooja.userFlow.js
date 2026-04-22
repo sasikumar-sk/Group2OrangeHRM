@@ -1,4 +1,4 @@
-import { test } from '../../fixtures/fixtures'
+import { test } from '../fixtures/fixtures.js'
 import { expect } from '@playwright/test'
 
 test.describe('Login as Admin and verify access', () => {
