@@ -15,9 +15,12 @@ export class LoginPage {
   }
 
   async login(username, password) {
-    await this.page.fill('input[name="username"]', username);
-    await this.page.fill('input[name="password"]', password);
+    if (username) await this.page.fill('input[name="username"]', username);
+    if (password) await this.page.fill('input[name="password"]', password);
     await this.loginBtn.click();
-  
+  }
+
+  async waitForDashboard() {
+    await this.page.locator('h6:has-text("Dashboard"), h6:has-text("Pizarra de pendientes")').waitFor({ state: 'visible', timeout: 15000 });
   }
 }

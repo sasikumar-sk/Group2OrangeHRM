@@ -8,8 +8,13 @@ test.beforeEach(async ({ page }) => {
   const loginPage = new LoginPage(page);
 
   await loginPage.navigate(env.baseURL);
-   await loginPage.login(env.adminUser.username, env.adminUser.password);
-   await expect(page.locator('h6').first()).toHaveText(/Dashboard|Pizarra de pendientes/);
+  await loginPage.login(env.adminUser.username, env.adminUser.password);
+  
+  // Wait for network to be idle and dashboard to render
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(1000); // Additional buffer
+  
+  await expect(page.locator('h6').first()).toHaveText(/Dashboard|Pizarra de pendientes/, { timeout: 10000 });
 });
 
 test('Validate mandatory fields in Add Employee', async ({ page }) => {
@@ -91,7 +96,11 @@ test('Valid employee creation ', async ({ page }) => {
 
   await addEmployeePage.clickSave();
 
-  await expect(page).toHaveURL(/viewPersonalDetails/);
+  // Add wait before assertion
+  await page.waitForLoadState('networkidle');
+  await page.waitForTimeout(1000);
+
+  await expect(page).toHaveURL(/viewPersonalDetails/, { timeout: 15000 });
 });
 })
 test.describe('Login Page Validations', () => {

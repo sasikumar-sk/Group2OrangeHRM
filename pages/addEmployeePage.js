@@ -18,8 +18,10 @@ await this.lastName.fill(last);
  }
 
 async clickSave() {
-await this.saveBtn.click();
- }
+  await this.saveBtn.click();
+  // Wait for success toast or redirection to signify the save is processed
+  await this.page.waitForLoadState('networkidle');
+}
 
  async enableLoginDetails() {
 await this.loginToggleLabel.click();
