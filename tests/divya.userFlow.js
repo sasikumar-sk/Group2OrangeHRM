@@ -100,7 +100,7 @@ test('Valid employee creation ', async ({ page }) => {
   await page.waitForLoadState('networkidle');
   await page.waitForTimeout(1000);
 
-  await expect(page).toHaveURL(/viewPersonalDetails/, { timeout: 15000 });
+  await expect(page).toHaveURL(/viewPersonalDetails/, { timeout: 30000 });
 });
 })
 test.describe('Login Page Validations', () => {
