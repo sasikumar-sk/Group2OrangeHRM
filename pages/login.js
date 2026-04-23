@@ -20,6 +20,8 @@ export class LoginPage {
     this.pimMenu = page.getByRole('link', { name: 'PIM' })
     this.leaveMenu = page.getByRole('link', { name: 'Leave' })
     this.myInfoMenu = page.getByRole('link', { name: 'My Info' })
+    this.profileDropdown = page.locator('.oxd-userdropdown-tab')
+    this.logoutBtn = page.getByRole('menuitem', { name: 'Logout' })
   }
 
   async goto() {
@@ -31,6 +33,12 @@ export class LoginPage {
     await this.password.fill(password)
     await this.loginButton.click()
     await this.page.waitForLoadState('networkidle')
+  }
+
+  async logout() {
+    await this.profileDropdown.click();
+    await this.logoutBtn.click();
+    await this.username.waitFor();
   }
 
 }
