@@ -94,13 +94,10 @@ test('Valid employee creation ', async ({ page }) => {
     'Password123!'
   );
 
-  await addEmployeePage.clickSave();
-
-  // Add wait before assertion
-  await page.waitForLoadState('networkidle');
-  await page.waitForTimeout(1000);
-
-  await expect(page).toHaveURL(/viewPersonalDetails/, { timeout: 30000 });
+  await Promise.all([
+  page.waitForURL(/viewPersonalDetails/, { timeout: 20000 }),
+  addEmployeePage.clickSave()
+]);
 });
 })
 test.describe('Login Page Validations', () => {
