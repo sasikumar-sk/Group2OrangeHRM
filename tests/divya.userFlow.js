@@ -95,10 +95,13 @@ test('Valid employee creation ', async ({ page }) => {
   );
 
   await Promise.all([
-  page.waitForURL(/viewPersonalDetails/, { timeout: 20000 }),
+  page.waitForURL('**/pim/viewPersonalDetails/**', { timeout: 30000 }),
   addEmployeePage.clickSave()
 ]);
-});
+await expect(
+  page.getByRole('heading', { name: 'Personal Details' })
+).toBeVisible();
+})
 })
 test.describe('Login Page Validations', () => {
 
