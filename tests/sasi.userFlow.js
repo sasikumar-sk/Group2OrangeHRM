@@ -1,9 +1,9 @@
 import { test, expect } from '@playwright/test';
 import { LoginPage } from '../pages/loginPage.js';
-import { PIMPage } from '../pages/pimPage.js';
+import { PIMPage } from '../pages/pimPage.js'
 import env from '../config/env.js';
 
-test('SC01-SC13 - Employee Creation and Search Flow', async ({ page }) => {
+test('SU-01-SU-13 - Employee Creation and Search Flow', async ({ page }) => {
   const loginPage = new LoginPage(page);
   const pimPage = new PIMPage(page);
 
@@ -27,7 +27,7 @@ test('SC01-SC13 - Employee Creation and Search Flow', async ({ page }) => {
 
   // SC03 – Add Employee
   console.log('Proceeding to add employee');
-  
+
   // SC04 – Create Login Details for Employee
   await pimPage.createEmployee(firstName, lastName, username, password, employeeId);
 
@@ -35,8 +35,8 @@ test('SC01-SC13 - Employee Creation and Search Flow', async ({ page }) => {
   await pimPage.navigateToPIM();
   await pimPage.searchEmployee(employeeName);
   await pimPage.clickEmployeeByName(employeeName);
-  await expect(page.locator('input[name="firstName"]')).toHaveValue(firstName);
-  await expect(page.locator('input[name="lastName"]')).toHaveValue(lastName);
+  await expect(page.locator('input[name="firstName"]')).toHaveValue(firstName, { timeout: 15000 });
+  await expect(page.locator('input[name="lastName"]')).toHaveValue(lastName, { timeout: 15000 });
 
   // SC06 – Search Created User (as Admin)
   await pimPage.navigateToPIM();
@@ -55,7 +55,7 @@ test('SC01-SC13 - Employee Creation and Search Flow', async ({ page }) => {
   console.log('Successfully logged in with newly created user');
 
 
- //'SC09 - Employee Deletion Flow'
+  //'SC09 - Employee Deletion Flow'
 
   // Logout from current user before fresh login
   try {
@@ -84,5 +84,5 @@ test('SC01-SC13 - Employee Creation and Search Flow', async ({ page }) => {
   // Delete employee from list page
   await pimPage.deleteEmployee(employeeName);
   await page.waitForTimeout(2000);
-   
+
 });

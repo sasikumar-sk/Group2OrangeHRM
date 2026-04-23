@@ -3,5 +3,9 @@ export default {
   adminUser: {
     username: 'Admin',
     password: 'admin123'
+  },
+  invaliuser: {
+    username: 'Test',
+    password: 'test123'
   }
 };

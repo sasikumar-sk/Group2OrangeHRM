@@ -5,7 +5,8 @@ export class LoginPage {
     // Locators
     this.usernameInput = page.locator('input[name="username"]');
     this.passwordInput = page.locator('input[name="password"]');
-    this.loginBtn = page.locator('button[type="submit"]');
+    this.loginBtn = page.getByRole('button', { name: 'Login' });
+    this.errorMessage = page.getByText('Invalid credentials')
   }
 
   async navigate(url) {
@@ -14,9 +15,12 @@ export class LoginPage {
   }
 
   async login(username, password) {
-    await this.page.fill('input[name="username"]', username);
-    await this.page.fill('input[name="password"]', password);
+    if (username) await this.page.fill('input[name="username"]', username);
+    if (password) await this.page.fill('input[name="password"]', password);
     await this.loginBtn.click();
-    await this.page.waitForSelector('h6', { timeout: 10000 });
+  }
+
+  async waitForDashboard() {
+    await this.page.locator('h6:has-text("Dashboard"), h6:has-text("Pizarra de pendientes")').waitFor({ state: 'visible', timeout: 15000 });
   }
 }
